@@ -22,6 +22,9 @@ contract MyToken {
     }
     
     function transfer(address _to, uint256 _value) public returns (bool success) {
+        require(_to != address(0));
+        //It's posible to skip this control if uses the 0.8 version of solidity. Also you can use
+        //openzepelling to minor versions https://github.com/OpenZeppelin/openzeppelin-contracts/blob/master/contracts/utils/math/SafeMath.sol 
         require(balanceOf[msg.sender] >= _value, "Insufficient funds");
         balanceOf[msg.sender]-= _value;
         balanceOf[_to]+= _value;
@@ -30,6 +33,7 @@ contract MyToken {
     }
     
     function transferFrom(address _from, address _to, uint256 _value) public returns (bool success) {
+        require(_to != address(0));
         require(allowance[_from][msg.sender] >= _value, "Unauthorized");
         require(balanceOf[_from] >= _value, "Insufficient funds");
         allowance[_from][msg.sender]-= _value;

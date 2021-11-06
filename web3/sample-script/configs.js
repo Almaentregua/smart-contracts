@@ -1,6 +1,6 @@
 const properties = {
-   nodoUrl: "SOME_NODE",
-   address: "SOMO_ADDRESS"
+   nodoUrl: "node",
+   address: "address"
 };
 
 module.exports = properties;
