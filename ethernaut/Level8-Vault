@@ -1,0 +1,40 @@
+0xE8b7C81B68E4c54D6700a5Bd380a6D222DeD9a98
+
+
+Vault
+Difficulty 3/10
+
+Unlock the vault to pass the level!
+
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.6.0;
+
+contract Vault {
+  bool public locked;
+  bytes32 private password;
+
+  constructor(bytes32 _password) public {
+    locked = true;
+    password = _password;
+  }
+
+  function unlock(bytes32 _password) public {
+    if (password == _password) {
+      locked = false;
+    }
+  }
+}
+
+
+Solution:
+
+The variables only are private to others contracts, but are public in the blockchain. With this script we can access to the second position of the storage
+
+
+web3.eth.getStorageAt('0xE8b7C81B68E4c54D6700a5Bd380a6D222DeD9a98', 1,
+  function (err, count) {
+    console.log("Current count: " + parseInt(count, 16));
+  });
+
+
+More information: https://programtheblockchain.com/posts/2018/01/02/making-smart-contracts-with-public-variables/

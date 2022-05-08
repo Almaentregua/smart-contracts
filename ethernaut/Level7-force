@@ -1,2 +1,21 @@
-Deployed COntract: 0xaCe3f76c0a11C7f2aDBA56701942Bc8Df18e8692
+Force
+Difficulty 5/10
+
+Some contracts will simply not take your money ¯\_(ツ)_/¯
+
+The goal of this level is to make the balance of the contract greater than zero.
+
+  Things that might help:
+
+Fallback methods
+Sometimes the best way to attack a contract is with another contract.
+See the Help page above, section "Beyond the console"
+
+
+Solution
+
+The solution is use the function "selfdestruct" in an atack contract. It send all the balance to the address that we choice, not matter if the contract not have a fallback function.
+
+https://hackernoon.com/how-to-hack-smart-contracts-self-destruct-and-solidity
+
 
