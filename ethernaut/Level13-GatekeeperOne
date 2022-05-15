@@ -1,0 +1,61 @@
+Solution
+
+This challenge have 3 probleas to resolve:
+
+gate 1: This is easy. To pass this gate we have to use a contract. msg.sender come from contract and and tx.origin from the wallet.
+
+gate 2: This cost me more time. We have to find the way to see the gasleft() at this line and calculate the gas limit to send. It has to be multiple of 8191. 
+Also we have to take in account that the remaining gas has to be suficent to finish the execution of both contract. In mi case I use:
+
+gas limit: 99333
+
+At this line "require(gasleft().mod(8191) == 0);" after the execution of "gasleft()" I had 73719 of rremaining gas (73719/8191=9).
+
+To take in account this line "entrant = tx.origin;" consume a lot of gas. Storage is expensive (20,000 gas to store a value, 5,000 gas to update one).
+
+You can use the remix debug or logs with hardhat (also in remix). Here is some help https://www.youtube.com/watch?v=UuD4J7Yrc-A
+
+
+gate 3: For this gate I had to review the conversion between uint16,uint32,uint64,address. This video could be useful (also the canal) https://www.youtube.com/watch?v=PmG2qgQbvc8&list=LL&index=1
+
+address: It use 20 bytes. 20 bytes is equivalent to 40 hexadecimal numbers.
+uint16: It use 16 bits. 16 bits are equivalent to 2 bytes. 2 bytes are equivalent to 4 hexadecimal numbers.
+uint32: It use 32 bits. 32 bits are equivalent to 4 bytes. 4 bytes are equivalent to 8 hexadecimal numbers.
+uint64: It use 64 bits. 64 bits are equivalent to 8 bytes. 8 bytes are equivalent to 16 hexadecimal numbers.
+
+
+For example if we use the remix address 0x5B38Da6a701c568545dCfcB03FcB875f56beddC4 we could use "0x0000ddC40000ddC4" like _gateKey. 
+You have to choise a argument that satisfy all the require.
+
+
+require(uint32(uint64(_gateKey)) == uint16(uint64(_gateKey)), "GatekeeperOne: invalid gateThree part one");
+0x0000ddC4 == 0xddC4 
+
+require(uint32(uint64(_gateKey)) != uint64(_gateKey), "GatekeeperOne: invalid gateThree part two");
+0x0000ddC4 != 0x0000ddC40000ddC4
+
+require(uint32(uint64(_gateKey)) == uint16(tx.origin), "GatekeeperOne: invalid gateThree part three");
+0x0000ddC4 == 0xddC4 
+
+
+This was my contract to atack (with diferentes values):
+
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.10;
+
+interface Victim {
+  function enter(bytes8 _gateKey) external returns (bool);
+}
+
+contract Hack { 
+
+    bool public success;
+
+    constructor() {
+    }
+
+    function atack() external{
+        Victim victim = Victim(0x704A1eA41f63FfCba2961E9CbCF641Cc65940C39);
+        success = victim.enter(0x0000ddC40000ddC4);        
+    }
+}
