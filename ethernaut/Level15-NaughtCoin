@@ -1,0 +1,5 @@
+Solution
+
+For this level only have to know about ERC20
+
+First we have to use the function approbe, and after that the function trasnferFrom

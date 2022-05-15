@@ -1,0 +1,6 @@
+We have to find the contract in etherscan and see the contract that its create. It is the token contract that have the ether
+https://rinkeby.etherscan.io/address/0xA0175ea30Da31e14fA0Ad620e8FA690b5E13bC5b#internaltx
+
+After that we have to call the function destroy with one address, and it will destroy the contract and send the ether to that address.
+
+More information here: https://hackernoon.com/how-to-hack-smart-contracts-self-destruct-and-solidity
