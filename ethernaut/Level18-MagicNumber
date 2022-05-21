@@ -1,0 +1,47 @@
+Documentation
+
+https://www.youtube.com/watch?v=fRZ8_QfxG0E
+https://cse.iitk.ac.in/users/dwivedi/Blockchain/bytecode.pdf
+https://ethereum.github.io/yellowpaper/paper.pdf
+
+
+
+Bytecode to opcode: https://etherscan.io/opcode-tool
+
+
+Solution
+
+For this challenge we have to use bytecode becouse this have to be very tiny.
+
+The bycode that I write is:
+
+0x608060405234801561001057600080fd5b50600a8061001f6000396000f3fe602A60815260206081f3
+
+The first part is the code that only deploy the contract
+
+0x608060405234801561001057600080fd5b50600a8061001f6000396000f3fe
+
+And the code that is deployed in the blockchain is 602A60815260206081f3 and its translation to bytecode is
+
+60 2A PUSH1 0x2A (save 24 in stack, 42 in decimal)
+60 81 PUSH1 0x81 (save 81 in stack)
+52    MSTORE (save 24 in the position 0x81 of memory)
+60 20 PUSH1 0x20 (save 20 in stack, 20 is 32 in decimals)
+60 81 PUSH1 0x81 (save 81 in stack, is the position of memory where is the number 42)
+f3    RETURN (return the 32 bytes in position 81, in this position is the number 42) 
+
+
+Always that the program is called return 42, and is the answer that the challenge expect.
+
+To deploy the contract we can use the library web3. In from we have to use our wallet, and in data the bycode.
+
+web3.eth.sendTransaction({from: 'OUR_WALLET', data: '0x608060405234801561001057600080fd5b50600a8061001f6000396000f3fe602A60815260206081f3'})
+
+Other notes (not necessary for this challenge):
+
+The first 4 bytes of the keccak256 of the name function is used in the bytecode. Example:
+web3.utils.keccak256("whatIsTheMeaningOfLife()")
+0x650500c15ce33a97ad219acb4e19e643d45dc96f54e4ebdc9a34689cbc433599
+first 4 bytes: 650500c1
+
+
